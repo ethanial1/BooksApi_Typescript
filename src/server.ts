@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from 'morgan'
 import helmet from "helmet";
+import booksRutas from "./routes/booksR";
 
 class Server {
     public app: express.Application;
@@ -8,6 +9,7 @@ class Server {
     constructor() {
         this.app = express()
         this.config()
+        this.routes()
     }
 
     config() {
@@ -18,7 +20,7 @@ class Server {
     }
 
     routes() {
-
+        this.app.use(booksRutas)
     }
 
     start() {
