@@ -9,7 +9,7 @@ class BookRoutes {
     }
 
     rutas() {
-        this.router.get('/', (req, res) => res.send())
+        this.router.get('/', (req, res) => res.send('hola hola'))
     }
 }
 
