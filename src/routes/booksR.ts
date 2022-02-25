@@ -38,14 +38,31 @@ class BookRoutes {
     }
 
     async saveBook (req: Request, res: Response) {
-        const { titulo, autor, resumen, image } = req.body;
-        const newBook = new BookM(req.body);
-        await newBook.save()
+        try {
+            const { title, autor, resumen, image } = req.body;
+            if(!title || !autor || !resumen || !image) throw new Error()
 
-        res.json(newBook)
+            const newBook = new BookM(req.body);
+            await newBook.save()
+            res.json(newBook)
+
+        } catch (error) {
+            res.status(400).json({msg: "Datos del libro no validos"})
+        }
     }
     
-    updateBook (req: Request, res: Response) {}
+    async updateBook (req: Request, res: Response) {
+        try {
+            const { _id, title, autor, resumen, image } = req.body;
+            if(!_id || !title || !autor || !resumen || !image) throw new Error()
+
+            const updatedBook = await BookM.findByIdAndUpdate(_id, {title, autor, resumen, image})
+
+            res.json(updatedBook)
+        } catch (error) {
+            res.status(400).json({msg: "Datos del libro no validos"})
+        }
+    }
     
     deleteBook (req: Request, res: Response) {}
     
@@ -54,7 +71,7 @@ class BookRoutes {
         this.router.get('/all', this.getBooks)
         this.router.get('/one/:idbook', this.getBook)
         this.router.post('/saveone', this.saveBook)
-        this.router.put('/updateone/', this.updateBook)
+        this.router.put('/updateone', this.updateBook)
         this.router.delete('/del/:idbook', this.deleteBook)
     }
 }
