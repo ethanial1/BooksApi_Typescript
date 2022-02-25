@@ -56,7 +56,7 @@ class BookRoutes {
             const { _id, title, autor, resumen, image } = req.body;
             if(!_id || !title || !autor || !resumen || !image) throw new Error()
 
-            const updatedBook = await BookM.findByIdAndUpdate(_id, {title, autor, resumen, image})
+            const updatedBook = await BookM.findByIdAndUpdate(_id, {title, autor, resumen, image}, {new: true})
 
             res.json(updatedBook)
         } catch (error) {
@@ -64,7 +64,15 @@ class BookRoutes {
         }
     }
     
-    deleteBook (req: Request, res: Response) {}
+    async deleteBook (req: Request, res: Response) {
+        try {
+            const idBook = req.params.idbook;
+            const deletedBook = await BookM.findByIdAndDelete(idBook)
+            res.json(deletedBook)
+        } catch (error) {
+            res.status(500).json({msg: "Error al eliminar"})
+        }
+    }
     
     rutas() {
         this.router.get('/', this.info)
