@@ -1,4 +1,5 @@
 import { Request, Response, Router } from "express";
+import BookM from "../models/BookM";
 
 class BookRoutes {
     router: Router
@@ -8,22 +9,37 @@ class BookRoutes {
         this.rutas()
     }
 
+    info (req: Request, res: Response) {
+        res.json({
+            rutas: {
+                getAllBooks: "api/book/all",
+                getOneBook: "api/book/one",
+            },
+            autor: "Fernando Tolentino"
+        })
+    }
     
     getBooks (req: Request, res: Response) {
-        res.send('libros')
+        BookM.find()
+        .then(books => res.json(books))
     }
     
-    getBook () {
-        
-    }
+    getBook (req: Request, res: Response) {}
 
-    saveBook () {}
+    async saveBook (req: Request, res: Response) {
+        const { titulo, autor, resumen, image } = req.body;
+        const newBook = new BookM(req.body);
+        await newBook.save()
+
+        res.json(newBook)
+    }
     
-    updateBook () {}
+    updateBook (req: Request, res: Response) {}
     
-    deleteBook () {}
+    deleteBook (req: Request, res: Response) {}
     
     rutas() {
+        this.router.get('/', this.info)
         this.router.get('/all', this.getBooks)
         this.router.get('/one/:idbook', this.getBook)
         this.router.post('/saveone', this.saveBook)
