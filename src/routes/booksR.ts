@@ -24,7 +24,18 @@ class BookRoutes {
         .then(books => res.json(books))
     }
     
-    getBook (req: Request, res: Response) {}
+    async getBook (req: Request, res: Response) {
+        try {
+            const idBook = req.params.idbook;
+            const book = await BookM.findById(idBook);
+
+            if(book) return res.json(book)
+
+            res.status(404).json({msg: "Libro no encontrado. El id no pertenece a ningun libro."})
+        } catch (error) {
+            res.status(500).json({msg: "Error al buscar el libro, verificar el id ingresado", error})
+        }
+    }
 
     async saveBook (req: Request, res: Response) {
         const { titulo, autor, resumen, image } = req.body;
