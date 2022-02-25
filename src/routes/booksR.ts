@@ -9,7 +9,7 @@ class BookRoutes {
         this.rutas()
     }
 
-    info (req: Request, res: Response) {
+    public info (req: Request, res: Response) {
         res.json({
             rutas: {
                 getAllBooks: "api/book/all",
@@ -19,7 +19,7 @@ class BookRoutes {
         })
     }
     
-    getBooks (req: Request, res: Response) {
+    public getBooks (req: Request, res: Response): void {
         BookM.find()
         .then(books => res.json(books))
     }
@@ -37,7 +37,7 @@ class BookRoutes {
         }
     }
 
-    async saveBook (req: Request, res: Response) {
+    async saveBook (req: Request, res: Response): Promise<void> {
         try {
             const { title, autor, resumen, image } = req.body;
             if(!title || !autor || !resumen || !image) throw new Error()
@@ -51,7 +51,7 @@ class BookRoutes {
         }
     }
     
-    async updateBook (req: Request, res: Response) {
+    async updateBook (req: Request, res: Response): Promise<void> {
         try {
             const { _id, title, autor, resumen, image } = req.body;
             if(!_id || !title || !autor || !resumen || !image) throw new Error()
@@ -68,7 +68,10 @@ class BookRoutes {
         try {
             const idBook = req.params.idbook;
             const deletedBook = await BookM.findByIdAndDelete(idBook)
-            res.json(deletedBook)
+            if(deletedBook) return res.json(deletedBook)
+
+            res.status(404).json({msg: "No existe un libro con el id mandado"})
+
         } catch (error) {
             res.status(500).json({msg: "Error al eliminar"})
         }
