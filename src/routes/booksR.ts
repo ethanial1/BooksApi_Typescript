@@ -8,8 +8,27 @@ class BookRoutes {
         this.rutas()
     }
 
+    
+    getBooks (req: Request, res: Response) {
+        res.send('libros')
+    }
+    
+    getBook () {
+        
+    }
+
+    saveBook () {}
+    
+    updateBook () {}
+    
+    deleteBook () {}
+    
     rutas() {
-        this.router.get('/', (req, res) => res.send('hola hola'))
+        this.router.get('/all', this.getBooks)
+        this.router.get('/one/:idbook', this.getBook)
+        this.router.post('/saveone', this.saveBook)
+        this.router.put('/updateone/', this.updateBook)
+        this.router.delete('/del/:idbook', this.deleteBook)
     }
 }
 
